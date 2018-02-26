@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements LocationManagerDe
         lm = LocationManager.getInstance(getApplicationContext());
         lm.setLocationManagerDelegate(this);
         lm.setMonitoringInterval(5000);
+        lm.setScanMode(LocationManager.ScanMode.LOW_LATENCY);
         //------------------------------
 
         checkPermission();

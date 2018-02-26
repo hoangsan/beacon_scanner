@@ -10,15 +10,27 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 
+import com.sanvo.beacon.LocationManager;
+
 /*
   Created by San Vo on 12/12/2017.
  */
 
 public class Bluetooth {
-    public static ScanSettings getScanSettings() {
+    public static ScanSettings getScanSettings(LocationManager.ScanMode scanMode) {
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setReportDelay(0);
-        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
+        switch (scanMode) {
+            case LOW_LATENCY:
+                builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+                break;
+            case BALANCED:
+                builder.setScanMode(ScanSettings.SCAN_MODE_BALANCED);
+                break;
+            case LOW_POWER:
+                builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
+                break;
+        }
         return builder.build();
     }
 

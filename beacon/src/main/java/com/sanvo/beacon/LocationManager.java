@@ -26,6 +26,11 @@ import com.sanvo.beacon.object.Error;
  * Singleton object which you use to start and stop the delivery of location-related events to your app.
  */
 public class LocationManager {
+    public enum ScanMode {
+        LOW_LATENCY,
+        BALANCED,
+        LOW_POWER
+    }
     private static final int RANGING_LOOP_INTERVAL = 2000;//ms
 
     private static LocationManager _instance;
@@ -297,5 +302,17 @@ public class LocationManager {
      */
     public void setMonitoringInterval(int monitoringInterval) {
         BeaconManager.getInstance().setMonitoringInterval(monitoringInterval);
+    }
+
+    /**
+     * Set scan mode for scanning beacon. Just apply until request new ranging/monitoring.
+     * LOW_LATENCY : Scan using highest duty cycle. It's recommended to only use this mode when the application is running in the foreground.
+     * BALANCED : Perform Bluetooth LE scan in balanced power mode. Scan results are returned at a rate that provides a good trade-off between scan frequency and power consumption.
+     * LOW_POWER : Perform Bluetooth LE scan in low power mode. This is the default scan mode as it consumes the least power.
+     *
+     * @param scanMode The mode for scanning beacon.
+     */
+    public void setScanMode(ScanMode scanMode) {
+        _bleHandler.setScanMode(scanMode);
     }
 }

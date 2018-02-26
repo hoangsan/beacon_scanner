@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 
+import com.sanvo.beacon.LocationManager;
 import com.sanvo.beacon.io.Bluetooth;
 import com.sanvo.beacon.object.Beacon;
 import com.sanvo.beacon.object.BeaconRegion;
@@ -46,16 +47,23 @@ public class BLEHandler {
 
     private final BLEHandlerDelegate _delegate;
     private Context _context;
-    private final ScanSettings _scanSettings;
+    private ScanSettings _scanSettings;
     private final ScanCallback _scanCallback;
     private HashMap<String, BeaconRegion> _scannedBeaconRegions;
     private Runnable _delayRescanHandler;
+    private LocationManager.ScanMode _scanMode;
 
     public BLEHandler(Context context, BLEHandlerDelegate delegate) {
         _delegate = delegate;
         _context = context;
-        _scanSettings = Bluetooth.getScanSettings();
+        _scanMode = LocationManager.ScanMode.LOW_POWER;
+        _scanSettings = Bluetooth.getScanSettings(_scanMode);
         _scanCallback = new ScanResultHandler(_delegate);
+    }
+
+    public void setScanMode(LocationManager.ScanMode scanMode) {
+        _scanMode = scanMode;
+        _scanSettings = Bluetooth.getScanSettings(_scanMode);
     }
 
     public synchronized void changeScanRegions(final HashMap<String, BeaconRegion> scannedBeaconRegions) {

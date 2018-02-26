@@ -24,6 +24,7 @@ dependencies {
 ```
 ### Feature
 - Set interval for scanning exiting beacon region.
+- Set scan mode option: balance power, low latency or low power.
 - Start/Stop monitoring the specified region.
 - Start/Stop the delivery of notifications for the specified beacon region.
 
@@ -56,6 +57,7 @@ LocationManager lm;
 lm = LocationManager.getInstance(getApplicationContext());
 lm.setLocationManagerDelegate(this);
 lm.setMonitoringInterval(5000);
+lm.setScanMode(LocationManager.ScanMode.LOW_LATENCY);
         
 UUID towerUUID = UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d");
 int stage1Major = 1;
