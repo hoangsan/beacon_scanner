@@ -94,4 +94,4 @@ For the versions available, see the [tags on this repository](https://github.com
 
 ## License
 
-No license.
+beacon_scanner is provided under the MIT license. See LICENSE file for details.
