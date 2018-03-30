@@ -27,6 +27,7 @@ dependencies {
 - Set scan mode option: balance power, low latency or low power.
 - Start/Stop monitoring the specified region.
 - Start/Stop the delivery of notifications for the specified beacon region.
+- Stop all ranging, monitoring beacon regions.
 
 ```java
 public interface LocationManagerDelegate {
@@ -48,6 +49,7 @@ public class LocationManager {
   public void stopMonitoring(Region region);
   public void startRangingBeacons(BeaconRegion region);
   public void stopRangingBeacons(BeaconRegion region);
+  public void stopAll();
 }
 ```
 

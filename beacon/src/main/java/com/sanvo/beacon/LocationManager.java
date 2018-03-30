@@ -305,6 +305,16 @@ public class LocationManager {
     }
 
     /**
+     * Stop all ranging, monitoring
+     */
+    public void stopAll() {
+        _monitoredRegions.clear();
+        _rangingBeacons.clear();
+
+        this.handleOnRequestedRegionChanged();
+    }
+
+    /**
      * Set scan mode for scanning beacon. Just apply until request new ranging/monitoring.
      * LOW_LATENCY : Scan using highest duty cycle. It's recommended to only use this mode when the application is running in the foreground.
      * BALANCED : Perform Bluetooth LE scan in balanced power mode. Scan results are returned at a rate that provides a good trade-off between scan frequency and power consumption.

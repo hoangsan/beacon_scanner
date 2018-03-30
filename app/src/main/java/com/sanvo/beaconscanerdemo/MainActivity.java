@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements LocationManagerDe
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     //------------------------------
-                    UUID towerUUID = UUID.fromString("b9407f30-f5f8-466e-aff9-25556b57fe6d");
-                    int stage1Major = 1;
+                    UUID towerUUID = UUID.fromString("00000000-8ECE-1001-B000-001C4D7927C6");
+                    int stage1Major = 333;
                     int stage2Major = 2;
 
                     int door1Stage1Minor = 1;   //bc1
@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements LocationManagerDe
                     lm.startMonitoring(beaconRegion1);
                     lm.startMonitoring(beaconRegion2);
                     lm.startMonitoring(beaconRegion3);
+
+                    lm.startMonitoring(new BeaconRegion(UUID.fromString("00000000-7AEA-1001-B000-001C4D6BB1A3"),335,3,"button beacon"));
 
                     //lm.startMonitoring(new BeaconRegion(UUID.fromString("cd5e5fbe-4838-49e4-97d3-b18c6fd5f763"),2,"test1"));
                     //lm.startRangingBeacons(new BeaconRegion(UUID.fromString("cd5e5fbe-4838-49e4-97d3-b18c6fd5f763"),2,"test1"));

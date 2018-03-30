@@ -28,6 +28,7 @@ import java.util.List;
 
 public class BLEHandler {
     private static final int BLE_RESCAN_DELAY_TIME = 1000; //1s
+    private static final int BLE_REFRESH_DELAY_TIME = 5000; //5s
 
     public interface BLEHandlerDelegate {
         void didFail(int errorCode);
@@ -50,7 +51,9 @@ public class BLEHandler {
     private ScanSettings _scanSettings;
     private final ScanCallback _scanCallback;
     private HashMap<String, BeaconRegion> _scannedBeaconRegions;
-    private Runnable _delayRescanHandler;
+    private Handler _refreshScanHandler;
+    private Handler _delayRescanHandler;
+    private Runnable _scanRunnable;
     private LocationManager.ScanMode _scanMode;
 
     public BLEHandler(Context context, BLEHandlerDelegate delegate) {
@@ -59,6 +62,10 @@ public class BLEHandler {
         _scanMode = LocationManager.ScanMode.LOW_POWER;
         _scanSettings = Bluetooth.getScanSettings(_scanMode);
         _scanCallback = new ScanResultHandler(_delegate);
+
+        _delayRescanHandler = new Handler();
+        _refreshScanHandler = new Handler();
+        _scanRunnable = new ScanHandler();
     }
 
     public void setScanMode(LocationManager.ScanMode scanMode) {
@@ -69,17 +76,11 @@ public class BLEHandler {
     public synchronized void changeScanRegions(final HashMap<String, BeaconRegion> scannedBeaconRegions) {
         _scannedBeaconRegions = scannedBeaconRegions;
 
-        if(_delayRescanHandler==null) { //delay request rescan
-            _delayRescanHandler = new Runnable() {
-                @Override
-                public void run() {
-                    reScan();
-                    _delayRescanHandler = null;
-                }
-            };
-
-            new Handler().postDelayed(_delayRescanHandler, BLEHandler.BLE_RESCAN_DELAY_TIME);
+        //delay start scan
+        if(_scanRunnable !=null) { //delay request rescan
+            _delayRescanHandler.removeCallbacks(_scanRunnable);
         }
+        _delayRescanHandler.postDelayed(_scanRunnable, BLEHandler.BLE_RESCAN_DELAY_TIME);
 
         //
         if (scannedBeaconRegions.size() > 0) {
@@ -123,7 +124,14 @@ public class BLEHandler {
             if(_delegate != null)
                 _delegate.startRangingLoop();
         }
+
+        //refresh scan every BLE_REFRESH_DELAY_TIME (s)
+        if(_scanRunnable !=null) {
+            _refreshScanHandler.removeCallbacks(_scanRunnable);
+        }
+        _refreshScanHandler.postDelayed(_scanRunnable,BLE_REFRESH_DELAY_TIME);
     }
+
     private List<ScanFilter> getScanFilters() {
         if(_scannedBeaconRegions.size() > 0) {
             ArrayList<ScanFilter> scanFilters = new ArrayList();
@@ -199,4 +207,11 @@ public class BLEHandler {
             }
         }
     };
+
+    class ScanHandler implements Runnable {
+        @Override
+        public void run() {
+            reScan();
+        }
+    }
 }
