@@ -28,7 +28,7 @@ public class ScanFilterParser {
         //2-17
         if(beaconRegion.getProximityUUID() != null) {
             Binary.writeUUID(manufacturerDataOs,beaconRegion.getProximityUUID());
-            Binary.fillIntValue(manufacturerDataMaskOs,1,16);
+            Binary.fillIntValue(manufacturerDataMaskOs,0xff,16);
         }
         else {
             Binary.fillIntValue(manufacturerDataOs,0,16);
@@ -38,7 +38,7 @@ public class ScanFilterParser {
         //18-19
         if(beaconRegion.getMajor() != -1) {
             Binary.write16bits(manufacturerDataOs,beaconRegion.getMajor());
-            Binary.write16bits(manufacturerDataMaskOs,1);
+            Binary.write16bits(manufacturerDataMaskOs,0xffff);
         }
         else {
             Binary.write16bits(manufacturerDataOs,0);
@@ -48,7 +48,7 @@ public class ScanFilterParser {
         //20-21
         if(beaconRegion.getMinor() != -1) {
             Binary.write16bits(manufacturerDataOs,beaconRegion.getMinor());
-            Binary.write16bits(manufacturerDataMaskOs,1);
+            Binary.write16bits(manufacturerDataMaskOs,0xffff);
         }
         else {
             Binary.write16bits(manufacturerDataOs,0);
